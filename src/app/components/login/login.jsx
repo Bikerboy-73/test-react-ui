@@ -41,7 +41,7 @@ class Login extends Component {
                       description: res.message
                     });
                     console.log("Response data", res);
-                    this.props.history.push("/");
+                    this.props.history.push("/dashboard");
                     break;
                   case "FAIL":
                     notification.error({

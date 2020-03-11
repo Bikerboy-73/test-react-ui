@@ -16,6 +16,7 @@ const RoutDictionary = ({ location, ...rest }) => {
       <Route exact path="/edit" component={Edit} />
       <Route exact path="/test" component={Test} />
       <Route exact path="/login" component={Login} />
+      <Route exact path="/dashboard" component={Dashboard} />
     </Switch>
   );
 };
