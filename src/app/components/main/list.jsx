@@ -52,7 +52,7 @@ class List extends React.Component {
       })
         .then(res => {
           resStatus = res.status;
-          console.log(resStatus)  
+          console.log("res", resStatus)  
           switch (resStatus) {
             case 201:
               notification.success({
@@ -109,7 +109,7 @@ class List extends React.Component {
 
   fetch = () => {
     this.setState({ loading: true });
-    fetchApi(`/user-types/`, "get").then(res => {
+    fetchApi(`/users/`, "get").then(res => {
         this.setState({ 
             loading: false,
             data: res.data
@@ -180,7 +180,7 @@ class List extends React.Component {
     <div>
         <Link to="/add">
         <Button type="link" block>
-            Add
+            Add   
         </Button>
         </Link>
       <Table
