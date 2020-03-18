@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import { Layout, Menu, Breadcrumb, Button } from 'antd';
 import {Link} from 'react-router-dom'
-import "../../components/index/indexPage.css"
+import "./indexPage.css"
 
 const { Header, Content, Footer } = Layout;
 
@@ -34,7 +34,7 @@ class IndexPage extends Component {
                                 Login   
                             </Button>
                         </Link>
-                        <Link to="/login">
+                        <Link to="/register">
                             <Button type="button">
                                 Register   
                             </Button>

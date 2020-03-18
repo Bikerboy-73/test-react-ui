@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
-import { Form, Input, InputNumber, Button, notification } from 'antd';
+import { Form, Input, InputNumber, Tooltip, Button, notification } from 'antd';
 import axios from "axios";
+import { QuestionCircleOutlined } from '@ant-design/icons';
 import {Route, Link} from 'react-router-dom'
 import 'antd/dist/antd.css';
 
@@ -32,11 +33,24 @@ class Register extends Component {
       },
     };
 
+    const tailFormItemLayout = {
+      wrapperCol: {
+        xs: {
+          span: 24,
+          offset: 0,
+        },
+        sm: {
+          span: 16,
+          offset: 8,
+        },
+      },
+    };
+
 
     const onFinish = values => {
       console.log("values",values);
       let resStatus = 0;
-      let url = `http://127.0.0.1:5000/api/v1/user-types/`;
+      let url = `http://127.0.0.1:5000/api/v1/users/`;
       axios({
         method: "POST",
         url: url,
@@ -97,26 +111,80 @@ class Register extends Component {
         </Link>
         <div>
        <Form {...layout} name="nest-messages" onFinish={onFinish} validateMessages={validateMessages}>
-       <Form.Item name={['name']} label="Name" rules={[{ required: true }]}>
-       <Input />
-     </Form.Item>
-     <Form.Item name={['email']} label="Email" rules={[{ type: 'email' }]}>
-       <Input />
-     </Form.Item>
-     <Form.Item name={['age']} label="Age" rules={[{ type: 'number', min: 18, max: 99 }]}>
-       <InputNumber />
-     </Form.Item>
-     <Form.Item name={['website']} label="Website">
-       <Input />
-     </Form.Item>
-     <Form.Item name={['introduction']} label="Introduction">
-       <Input.TextArea />
-     </Form.Item>
-     <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
-       <Button type="primary" htmlType="submit">
-         Save
-       </Button>
-     </Form.Item>
+       <Form.Item
+          name="email"
+          label="E-mail"
+          rules={[
+            {
+              type: 'email',
+              message: 'The input is not valid E-mail!',
+            },
+            {
+              required: true,
+              message: 'Please input your E-mail!',
+            },
+          ]}
+        >
+          <Input />
+        </Form.Item>
+
+        <Form.Item
+          name="password"
+          label="Password"
+          rules={[
+            {
+              required: true,
+              message: 'Please input your password!',
+            },
+          ]}
+          hasFeedback
+        >
+          <Input.Password />
+        </Form.Item>
+
+        <Form.Item
+          name="confirmPassword"
+          label="Confirm Password"
+          dependencies={['password']}
+          hasFeedback
+          rules={[
+            {
+              required: true,
+              message: 'Please confirm your password!',
+            },
+            ({ getFieldValue }) => ({
+              validator(rule, value) {
+                if (!value || getFieldValue('password') === value) {
+                  return Promise.resolve();
+                }
+                return Promise.reject('The two passwords that you entered do not match!');
+              },
+            }),
+          ]}
+        >
+          <Input.Password />
+        </Form.Item>
+
+        <Form.Item
+          name="name"
+          label={
+            <span>
+              Name&nbsp;
+              <Tooltip title="Please enter your name.">
+                <QuestionCircleOutlined />
+              </Tooltip>
+            </span>
+          }
+          rules={[{ required: true, message: 'Please input your Nname!', whitespace: true }]}
+        >
+          <Input />
+        </Form.Item>
+        
+        <Form.Item {...tailFormItemLayout}>
+          <Button type="primary" htmlType="submit">
+            Submit
+          </Button>
+        </Form.Item>
       </Form>
       </div>
     </div>

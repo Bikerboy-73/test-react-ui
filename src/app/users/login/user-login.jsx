@@ -7,20 +7,23 @@ import '../login/user-login.css'
 
 class UserLogin extends Component {
     
-      constructor() {
-        super();
-          this.state = { 
-            data : []
+      // constructor() {
+      //   super();
+          state = { 
+            data : [],
+            loading: false,
          }
-      }
+      // }
 
         onFinish = values => {
             let resStatus = "";
             console.log('Received values of form: ', values);
-            fetchApi(`/user-types/login/`, "post", values)
+            this.setState({ loading: true });
+            fetchApi(`/users/login`, "post", values)
             .then(res => {
+                console.log("response1", res)
                 resStatus = res.status;
-                console.log(resStatus)
+                console.log("status",resStatus)
                 console.log("Response data", res);
                 switch (resStatus) {
                   case "SUCCESS":
@@ -30,20 +33,31 @@ class UserLogin extends Component {
                       description: res.message
                     });
                     console.log("Response data", res);
+                    this.setState({ loading: false });
                     this.props.history.push("/dashboard");
                     break;
-                  case "FAIL":
+                  case "FALSE":
                     notification.error({
                       message: "Fail",
-                      duration: 3,
-                      description: "Something went wrong !"
+                      duration: 2,
+                      description: "Incorrect username or password."
                     });
                     break;
                   case 500:
                     console.log("server error, try again");
+                    notification.error({
+                      message: "Fail",
+                      duration: 2,
+                      description: "Incorrect username or password."
+                    });
                     break;
                   default:
                     console.log("unhandled");
+                    notification.error({
+                      message: "Fail",
+                      duration: 2,
+                      description: "Incorrect username or password."
+                    });
                     break;
                 }
                 if (res.status == "FAIL") {
@@ -75,13 +89,14 @@ class UserLogin extends Component {
                 name="normal_login"
                 className="login-form"
                 initialValues={{ remember: true }}
+                loading={this.state.loading}
                 onFinish={this.onFinish}
                 >
                 <Form.Item
-                name="username"
-                rules={[{ required: true, message: 'Please input your Username!' }]}
+                name="email"
+                rules={[{ required: true, message: 'Please input your Email!' }]}
                 >
-                <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />
+                <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Email" />
                 </Form.Item>
                 <Form.Item
                 name="password"
